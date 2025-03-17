@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags static %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        background-color: #f9f9f9;
+        font-family: 'Arial', sans-serif;
+        font-size: 16px; /* Global font size for body */
+        color: #333;
+        padding-top: 0; /* Remove top padding from body */
+    }
+
+    .login-container {
+        max-width: 450px;
+        background-color: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        padding: 3rem;
+        text-align: center;
+        margin-top: 2rem; /* Reduced space between navbar and form */
+    }
+
+    .login-title {
+        font-weight: 700;
+        color: #35424a;
+        margin-bottom: 30px;
+        font-size: 2rem;
+    }
+
+    .form-control {
+        border-radius: 30px;
+        padding-left: 50px;
+        border: 1px solid #ddd;
+        transition: all 0.3s ease;
+        font-size: 1.1rem;
+        height: 50px;
+    }
+
+    .form-control:focus {
+        border-color: #215293;
+        box-shadow: 0 0 5px rgba(255, 193, 7, 0.5);
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #7f8c8d;
+        font-size: 1.25rem;
+    }
+
+    .toggle-password {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #7f8c8d;
+        font-size: 1.25rem;
+    }
+
+    .btn-login {
+        background-color: black;
+        border: none;
+        color: #ffffff;
+        font-weight: bold;
+        border-radius: 30px;
+        padding: 12px;
+        font-size: 1.2rem;
+        transition: background-color 0.3s ease;
+        width: 100%;
+        cursor: pointer;
+    }
+
+    .btn-login:hover {
+        background-color: #215293;
+    }
+
+    .forgot-password,
+    .register-link {
+        color: #215293;
+        font-size: 1rem;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+    .forgot-password:hover,
+    .register-link:hover {
+        color: #215293;
+    }
+
+    .form-check-label {
+        font-size: 1rem;
+    }
+
+    .login-container p {
+        font-size: 0.9rem;
+    }
+
+    .register-link {
+        font-weight: 600;
+    }
+</style>
+
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="login-container">
+        <h2 class="login-title">Login to Your Account</h2>
+
+        {% if request.method == "POST" and form.non_field_errors %}
+            <p class="text-danger">{{ form.non_field_errors|join:", " }}</p>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-4 position-relative">
+                <i class="bi bi-person input-icon"></i>
+                <input type="text" name="username" class="form-control" placeholder="Username" required>
+            </div>
+            <div class="mb-4 position-relative">
+                <i class="bi bi-lock input-icon"></i>
+                <input type="password" name="password" id="password" class="form-control" placeholder="Password" required>
+                <i class="bi bi-eye toggle-password" onclick="togglePassword()"></i>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="rememberPassword">
+                    <label class="form-check-label" for="rememberPassword">Remember Me</label>
+                </div>
+                <a href="#" class="forgot-password">Forgot Password?</a>
+            </div>
+
+            <button type="submit" class="btn-login">Login</button>
+        </form>
+        <br>
+        <p>New here? <a href="{% url 'signup' %}" class="register-link">Sign up</a></p>
+    </div>
+</div>
+
+<script>
+    function togglePassword() {
+        const passwordField = document.getElementById("password");
+        const eyeIcon = document.querySelector(".toggle-password");
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            eyeIcon.classList.remove("bi-eye");
+            eyeIcon.classList.add("bi-eye-slash");
+        } else {
+            passwordField.type = "password";
+            eyeIcon.classList.remove("bi-eye-slash");
+            eyeIcon.classList.add("bi-eye");
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Books List{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        background-color: #f1f4f8;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color:  white;
+        text-align: center;
+        margin-top: 30px;
+        margin-bottom: 40px;
+    }
+
+    .card {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-img-top {
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+        height: 250px;
+        object-fit: cover;
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 0.5rem;
+    }
+
+    .card-text {
+        color: #777;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .btn-primary {
+        background-color: black;
+        border: none;
+        color: #ffffff;
+        font-weight: bold;
+        border-radius: 8px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: black;
+    }
+</style>
+
+<h1 class="page-title">Available Books</h1>
+<div class="container">
+    <div class="row">
+        {% for book in books %}
+        <div class="col-md-4 mb-4 d-flex align-items-stretch">
+            <div class="card w-100">
+                <img src="{{ book.image.url }}" class="card-img-top" alt="{{ book.title }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ book.title }}</h5>
+                    <p class="card-text">By {{ book.author }}</p>
+                    <a href="{% url 'book_detail' pk=book.pk %}" class="btn btn-primary w-100">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center text-muted">No books available at the moment.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

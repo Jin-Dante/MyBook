@@ -1,0 +1,269 @@
+{% extends 'base.html' %}
+{% block title %}{{ book.title }}{% endblock %}
+{% block content %}
+<style>
+    body {
+        background-color: #f1f8e8;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .book-card {
+        background-color: #ffffff;
+        border-radius: 15px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        padding: 2rem;
+        margin: auto;
+        margin-top: 30px;
+        max-width: 1000px;
+        position: relative;
+    }
+
+    .like-button {
+        display: flex;
+        align-items: center;
+        font-size: 2rem;
+        cursor: pointer;
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        transition: color 0.3s ease;
+        z-index: 10;
+    }
+
+    .liked {
+        color: #ff4757 !important;
+        animation: pop 0.3s ease forwards;
+    }
+
+    #like-icon {
+        color: #ccc;
+        margin-right: 5px;
+    }
+
+    .like-count {
+        font-size: 1rem;
+        color: #333;
+        font-weight: bold;
+    }
+
+    .book-image {
+        height: 460px;
+        overflow: hidden;
+        border-radius: 15px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        border: 2px solid #ccc;
+        padding: 3px;
+    }
+
+    .book-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    .book-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #35424a;
+        margin-bottom: 20px;
+    }
+
+    .book-details p {
+        font-size: 1.1rem;
+        color: #555;
+        margin-bottom: 10px;
+    }
+
+    .book-details strong {
+        color: #35424a;
+    }
+
+    .book-description {
+        margin-top: 20px;
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #666;
+    }
+
+    .btn-container {
+        margin-top: 30px;
+    }
+
+    .btn-success,
+    .btn-warning,
+    .btn-danger,
+    .btn-share {
+        font-weight: bold;
+        border-radius: 10px;
+        padding: 10px 20px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        color: #ffffff;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+    }
+
+    .btn-warning {
+        background-color: #215293;
+        color: #ffffff;
+    }
+
+    .btn-warning:hover {
+        background-color: #215293;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: #ffffff;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+
+    .btn-share {
+        background-color: #17a2b8;
+        color: #ffffff;
+    }
+
+    .btn-share:hover {
+        background-color: #138496;
+    }
+
+    /* Mobile-specific adjustments */
+    @media (max-width: 767px) {
+        .book-card {
+            padding: 1.5rem;
+        }
+
+        .like-count {
+            font-size: 1.8rem;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .like-button {
+            font-size: 4rem;
+            top: 10px;
+            left: auto;
+            right: 0px;
+        }
+
+        .book-title {
+            font-size: 1.5rem;
+            margin-top: 0;
+            padding-left: 40px;
+        }
+
+        .book-details p {
+            font-size: 1rem;
+        }
+
+        .btn-container {
+            margin-top: 20px;
+        }
+
+        .btn-success,
+        .btn-warning,
+        .btn-danger,
+        .btn-share {
+            padding: 8px 15px;
+        }
+    }
+</style>
+
+<div class="container">
+    <div class="book-card">
+        <!-- Like Button Section -->
+        <div class="like-button" id="like-button" data-liked="{{ user_has_liked|yesno:'true,false' }}">
+            <span id="like-icon" class="{% if user_has_liked %}liked{% endif %}">&#9829;</span>
+            <span class="like-count" id="like-count">{{ book.likes }}</span>
+        </div>
+
+        <!-- Book Image Section -->
+        <div class="row">
+            <div class="col-md-5 col-12 mb-4">
+                <div class="book-image">
+                    <img src="{{ book.image.url }}" alt="{{ book.title }} cover image" class="img-fluid">
+                </div>
+            </div>
+
+            <!-- Book Content Section -->
+            <div class="col-md-7 col-12">
+                <h1 class="book-title">{{ book.title }}</h1>
+                <div class="book-details">
+                    <p><strong>Author:</strong> {{ book.author }}</p>
+                    <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+                    <p><strong>Published:</strong> {{ book.published_date }}</p>
+                </div>
+                <div class="book-description">
+                    <p>{{ book.description }}</p>
+                </div>
+                <div class="btn-container mt-3">
+                    <a href="{{ book.pdf.url }}" class="btn btn-success mb-2" target="_blank">View PDF</a>
+                    <button class="btn btn-share mb-2" onclick="shareBook()">Share</button>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'book_update' pk=book.pk %}" class="btn btn-warning mb-2">Edit</a>
+                    <a href="{% url 'book_delete' pk=book.pk %}" class="btn btn-danger mb-2">Delete</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const icon = document.getElementById('like-icon');
+        const userHasLiked = document.getElementById('like-button').getAttribute('data-liked') === 'true';
+
+        if (userHasLiked) {
+            icon.classList.add('liked');
+        }
+    });
+
+    document.getElementById('like-button').addEventListener('click', function () {
+        const icon = document.getElementById('like-icon');
+        const count = document.getElementById('like-count');
+
+        fetch("{% url 'like_book' book.pk %}", {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    icon.classList.toggle('liked', data.liked);
+                    count.textContent = data.likes;
+                } else {
+                    console.error('Failed to update like');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    });
+
+    function shareBook() {
+        const bookUrl = window.location.href;
+        if (navigator.share) {
+            navigator.share({
+                title: '{{ book.title }}',
+                text: 'Check out this book: {{ book.title }} by {{ book.author }}',
+                url: bookUrl
+            }).then(() => {
+                console.log('Thanks for sharing!');
+            }).catch(console.error);
+        } else {
+            prompt('Copy this URL to share:', bookUrl);
+        }
+    }
+</script>
+
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} 
+
+{% block title %}{{ form.instance.pk|yesno:"Edit Book,Add Book" }}{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        background-color: #f1f4f8;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .form-container {
+        max-width: 800px;
+        width: 100%;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        padding: 2rem;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .form-title {
+        font-weight: 700;
+        color: #35424a;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .form-control {
+        border-radius: 25px;
+        padding-left: 15px;
+        border: 1px solid #ddd;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: black;
+        box-shadow: 0 0 5px black;
+    }
+
+    .btn-primary {
+        background-color: black;
+        border: none;
+        color: #ffffff;
+        font-weight: bold;
+        border-radius: 25px;
+        padding: 10px 20px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: black;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border: none;
+        color: #ffffff;
+        font-weight: bold;
+        border-radius: 25px;
+        padding: 10px 20px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+    }
+</style>
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="form-container">
+        <h1 class="form-title">{{ form.instance.pk|yesno:"Edit Book,Add Book" }}</h1>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-primary w-100">{{ form.instance.pk|yesno:"Save Changes,Save Book" }}</button>
+        </form>
+
+        <div class="text-center mt-3">
+            <a href="{% url 'book_list' %}" class="btn btn-secondary">Back to Book List</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

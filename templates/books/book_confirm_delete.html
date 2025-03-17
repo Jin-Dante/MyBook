@@ -1,0 +1,85 @@
+<!-- templates/books/book_confirm_delete.html -->
+{% extends 'base.html' %}
+
+{% block title %}Delete Book{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        background-color: #f1f4f8;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .confirmation-card {
+        max-width: 600px;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        padding: 2rem;
+        margin: 30px auto;
+        text-align: center;
+    }
+
+    .confirmation-card h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #35424a;
+        margin-bottom: 20px;
+    }
+
+    .confirmation-card p {
+        font-size: 1.1rem;
+        color: #666;
+        margin-bottom: 30px;
+    }
+
+    .btn-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border: none;
+        color: #ffffff;
+        font-weight: bold;
+        border-radius: 8px;
+        padding: 10px 20px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border: none;
+        color: #ffffff;
+        font-weight: bold;
+        border-radius: 8px;
+        padding: 10px 20px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+    }
+</style>
+
+<div class="container">
+    <div class="confirmation-card">
+        <h1>Are you sure you want to delete "{{ book.title }}"?</h1>
+        <p>This action cannot be undone.</p>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="btn-container">
+                <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                <a href="{% url 'book_list' %}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

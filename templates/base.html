@@ -1,0 +1,234 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Book Management System{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        body {
+            background: url("{% static 'images/bookb.jpg' %}") right center repeat;
+            background-size: cover;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+        }
+
+        .main-content-wrapper {
+            min-height: calc(100vh - 130px);
+            background: url("{% static 'images/bookbackg.jpg' %}") right center no-repeat;
+            background-size: cover;
+            padding-top: 5px;
+            padding-bottom: 0px;
+        }
+
+        /* Specific navbar styles */
+        .MyBook-navbar {
+            width: 100%;
+            padding: 1rem 2rem;
+            animation: fadeIn 1s ease-in-out;
+            background-color: #215293;
+        }
+
+        .MyBook-navbar .navbar-brand {
+            font-weight: bold;
+            font-size: 1.6rem;
+            color: #ffffff !important;
+            transition: transform 0.3s ease;
+        }
+
+        .MyBook-navbar .navbar-brand:hover {
+            transform: scale(1.1);
+        }
+
+        .MyBook-navbar .navbar-nav .nav-link {
+            font-weight: 500;
+            color: #ffffff !important;
+            position: relative;
+        }
+
+        .MyBook-navbar .navbar-nav .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 50%;
+            background-color: #ffffff;
+            transition: width 0.3s, left 0.3s;
+        }
+
+        .MyBook-navbar .navbar-nav .nav-link:hover::after {
+            width: 100%;
+            left: 0;
+        }
+
+        .MyBook-navbar .navbar-toggler {
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .MyBook-navbar .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%28255, 255, 255, 0.5%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+        }
+
+        .MyBook-navbar .profile-options {
+            display: flex;
+            align-items: center;
+        }
+
+        .MyBook-navbar .profile-options .nav-link {
+            margin-left: 1rem;
+        }
+
+        /* Footer specific styles */
+        .MyBook-footer {
+            background-color: #456b82;
+            color: #ffffff;
+            padding: 1.5rem 0;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .MyBook-footer p {
+            margin: 0;
+            color: #cccccc;
+        }
+
+        .MyBook-footer .social-icons a {
+            font-size: 1.3rem;
+            color: #ffffff;
+            margin: 0 0.6rem;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .MyBook-footer .social-icons a:hover {
+            color: #ffffff;
+            transform: scale(1.2);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile dropdown for profile options */
+        @media (max-width: 768px) {
+            .MyBook-navbar .profile-options {
+                display: none;
+                /* Hide profile options on larger screens */
+            }
+
+            .MyBook-navbar .navbar .dropdown-menu {
+                display: block;
+                /* Show the dropdown in mobile view */
+            }
+
+            .MyBook-navbar .navbar-collapse {
+                text-align: center;
+                /* Center items in the navbar on mobile */
+            }
+
+            .MyBook-navbar .navbar-nav .nav-item {
+                margin: 0.5rem 0;
+                /* Add spacing between nav items */
+            }
+
+            .MyBook-navbar .navbar-toggler {
+                margin-left: auto;
+                /* Align toggler to the right */
+            }
+
+            .MyBook-navbar .navbar-nav.profile-options {
+                display: block;
+            }
+
+            /* Sign Up and Login for mobile */
+            .MyBook-navbar .navbar-nav .nav-item {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg shadow-sm MyBook-navbar">
+        <a class="navbar-brand" href="{% url 'book_list' %}">
+            <i class="fas fa-book-open"></i> MyBook
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <form class="form-inline my-2 my-lg-0 mx-auto" action="{% url 'book_search' %}" method="GET">
+                <input class="form-control mr-sm-2 search-bar" type="search" placeholder="Search books..." name="q"
+                    aria-label="Search">
+                <button class="btn btn-outline-warning my-2 my-sm-0" type="submit">Search</button>
+            </form>
+            <ul class="navbar-nav profile-options">
+                {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'book_create' %}"><i class="bi bi-plus-circle"></i> Add Book</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'profile_edit' %}"><i class="bi bi-pencil-fill"></i> Edit
+                        Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'contact_us' %}"><i class="bi bi-envelope-fill"></i> Contact Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}"><i class="bi bi-box-arrow-right"></i> Logout</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="bi bi-person-circle"></i> {{ user.username }}
+                    </a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'signup' %}"><i class="bi bi-person-plus-fill"></i> Sign Up</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}"><i class="bi bi-box-arrow-in-right"></i> Login</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="main-content-wrapper">
+        <div class="container mt-4">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-5 text-center MyBook-footer">
+        <div class="container">
+
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+
+</body>
+
+</html>
