@@ -21,7 +21,11 @@ SECRET_KEY = 'django-insecure-k-c*6vig9g97=j*=cd=xe=so$c(1wy+=%b%zf9v33ow8=_@hg-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['bookmanagement-kjwg.onrender.com','127.0.0.1','localhost']
+ALLOWED_HOSTS = [
+    "mybook-1uq5.onrender.com",  # Render website
+    "127.0.0.1",  # local test
+    "localhost"
+]
 
 
 # Application definition
