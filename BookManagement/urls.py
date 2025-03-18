@@ -33,7 +33,7 @@ urlpatterns = [
     path('profile/edit/', views.edit_profile, name='profile_edit'),
     path('contact-us/', views.contact_us, name='contact_us'),
     path('book/<int:pk>/like/', views.like_book, name='like_book'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
