@@ -1,0 +1,7 @@
+services:
+  - name: MyBook-media
+    env: static
+    buildCommand: |
+      apt-get update && apt-get install -y nginx
+    startCommand: nginx -c /opt/render/project/nginx.conf
+    staticPublishPath: /opt/render/project/media/
