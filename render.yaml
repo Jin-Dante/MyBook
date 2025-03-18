@@ -1,7 +1,5 @@
 services:
   - name: MyBook-media
-    env: docker
-    buildCommand: |
-      apt-get update && apt-get install -y nginx
-    startCommand: nginx -c /opt/render/project/nginx.conf
-    staticPublishPath: /opt/render/project/media/
+    env: docker  # 需要使用 docker
+    dockerfilePath: ./Dockerfile  # 指定 Dockerfile
+    staticPublishPath: /opt/render/project/media/  # 让 Render 识别 media 目录
