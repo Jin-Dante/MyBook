@@ -1,10 +1,10 @@
-# 使用 Ubuntu 作为基础镜像
+# 使用官方 Ubuntu 镜像
 FROM ubuntu:latest
 
-# 安装 Nginx
+# 更新包列表并安装 nginx
 RUN apt-get update && apt-get install -y nginx
 
-# 复制 nginx 配置文件
+# 复制 Nginx 配置文件到正确位置
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # 创建 media 目录
@@ -16,5 +16,5 @@ WORKDIR /opt/render/project
 # 暴露 80 端口
 EXPOSE 80
 
-# 启动 Nginx
+# 让 Nginx 以前台模式运行
 CMD ["nginx", "-g", "daemon off;"]
