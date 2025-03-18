@@ -18,7 +18,7 @@ LOGIN_URL = 'login'
 SECRET_KEY = 'django-insecure-k-c*6vig9g97=j*=cd=xe=so$c(1wy+=%b%zf9v33ow8=_@hg-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     "mybook-1uq5.onrender.com",  # Render website
@@ -121,6 +121,10 @@ STATICFILES_DIRS = [
 ]
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'  # for collectstatic
+
+if not DEBUG:
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
 
 
 MEDIA_URL = '/media/'
