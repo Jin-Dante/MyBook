@@ -1,7 +1,6 @@
 services:
   - name: MyBook-media
     env: docker
-    buildCommand: apt-get update && apt-get install -y nginx
-    startCommand: nginx -g "daemon off;"
+    dockerfilePath: ./Dockerfile  # 指定 Dockerfile
     ports:
       - 10000
