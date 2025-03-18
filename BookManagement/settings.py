@@ -39,11 +39,13 @@ INSTALLED_APPS = [
     'books',
     'crispy_forms',
     'crispy_bootstrap5',
+    'whitenoise.runserver_nostatic'
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

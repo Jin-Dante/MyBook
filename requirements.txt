@@ -1,5 +1,6 @@
 crispy-bootstrap5==2024.10
+whitenoise
 Django==5.1.2
 django-crispy-forms==2.3
-gunicorn==21.2.0
+gunicorn==22.0.0
 Pillow==9.2.0
