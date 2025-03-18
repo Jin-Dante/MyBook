@@ -17,7 +17,7 @@ WORKDIR /opt/render/project
 VOLUME /opt/render/project/media
 
 # 暴露 80 端口
-EXPOSE 10000
+EXPOSE 80
 
 # 让 Nginx 以前台模式运行
 CMD ["nginx", "-g", "daemon off;"]
